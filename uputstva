@@ -1,0 +1,14 @@
+Napravi Python program koji:
+    1. Učita log fajl.
+    2. Regex-om izvuče date, time, level, user, action i ip.
+    3. Napravi nested dictionary strukturu po korisnicima.
+    4. Izračuna:
+        ○ broj loginova po korisniku
+        ○ broj errora
+        ○ broj payment pokušaja
+        ○ najaktivnijeg korisnika
+    5. Pronađe IP adrese koje su imale više od 3 ERROR događaja.
+    6. Rezultate upiše u report.txt.
+    7. Ako fajl ne postoji, program treba uredno da prijavi grešku.
+    8. Organizuje kod u funkcije (def).
+    9. Omogući pokretanje kroz command line, npr.:python analyzer.py server.log
