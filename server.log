@@ -2,4 +2,4 @@
 2026-09-15 10:22:01 ERROR user=marko action=payment ip=10.0.0.5 
 2026-09-15 10:22:15 INFO user=pera action=view ip=192.168.1.10
 2026-09-15 10:23:44 ERROR user=pera action=payment ip=192.168.1.10
-2026-09-15 10:24:02 WARNING user=ana action=login ip=172.16.0.2 
+2026-09-15 10:24:02 WARNING user=ana action=login ip=172.16.0.2
