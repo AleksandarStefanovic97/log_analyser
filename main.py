@@ -55,6 +55,29 @@ def most_active(stats):
     return max(stats, key=lambda user: stats[user]["actions_count"])
 
 
+def find_bad_ips(parsed_lines):
+    ip_errors = {}
+    bad_ips = []
+
+    for parsed in parsed_lines:
+
+        ip = parsed["ip"]
+
+        if parsed["level"] != "ERROR":
+            continue
+        if ip is None:
+            continue
+        if ip not in ip_errors:
+            ip_errors[ip] = 0
+
+        ip_errors[ip] += 1
+
+    for ip in ip_errors:
+        if ip_errors[ip] > 3:
+            bad_ips.append(ip)
+
+    return bad_ips
+
 
 parsed_lines = []
 
@@ -66,3 +89,4 @@ with open('server.log', "r") as file:
 stats = build_stats(parsed_lines)
 print(stats)
 print(most_active(stats))
+print(find_bad_ips(parsed_lines))
