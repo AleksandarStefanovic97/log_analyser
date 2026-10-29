@@ -1,5 +1,5 @@
 import re
-
+import sys
 
 date_pattern = r"(\d{4}-\d{2}-\d{2})"
 time_pattern = r"(\d{2}:\d{2}:\d{2})"
@@ -52,8 +52,10 @@ def build_stats(parsed_lines):
     return stats
 
 def most_active(stats):
-    return max(stats, key=lambda user: stats[user]["actions_count"])
+    if not stats:
+        return None
 
+    return max(stats, key=lambda user: stats[user]["actions_count"])
 
 def find_bad_ips(parsed_lines):
     ip_errors = {}
@@ -78,15 +80,45 @@ def find_bad_ips(parsed_lines):
 
     return bad_ips
 
+def write_report(stats, most_active_user, bad_ips):
 
-parsed_lines = []
+    with open("report.txt", "w") as report:
 
-with open('server.log', "r") as file:
-    for line in file:
-        parsed_lines.append(parse_line(line))
+        for user in stats:
+            report.write(f"Korisnik {user}: logins={stats[user]['login_count']}, errors={stats[user]['err_count']}, payments={stats[user]['pay_count']}\n")
+
+        report.write(f"Najaktivniji korisnik: {most_active_user}\n")
+        report.write(f"IP adrese sa vise od 3 errora: {bad_ips}\n")
 
 
-stats = build_stats(parsed_lines)
-print(stats)
-print(most_active(stats))
-print(find_bad_ips(parsed_lines))
+def main():
+
+    if len(sys.argv) < 2:
+        print("Upotreba: python3 main.py <ime_loga>")
+        return
+
+    file_name = sys.argv[1]
+    parsed_lines = []
+
+    try:
+        with open(file_name, "r") as file:
+            for line in file:
+                parsed_lines.append(parse_line(line))
+
+
+    except FileNotFoundError:
+        print("Nije pronadjen fajl.")
+        return
+
+    stats = build_stats(parsed_lines)
+    most_active_user = most_active(stats)
+    if most_active_user is None:
+        most_active_user = 'nema podataka'
+    bad_ips = find_bad_ips(parsed_lines)
+
+
+    write_report(stats, most_active_user, bad_ips)
+
+if __name__ == "__main__": main()
+
+
